@@ -21,6 +21,8 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\snooze\SleeperNotifier;
 use pocketmine\utils\Config;
+use pocketmine\utils\Process;
+use pocketmine\utils\Utils;
 
 class CloudBridge extends PluginBase {
 
@@ -54,6 +56,7 @@ class CloudBridge extends PluginBase {
 
     protected function onDisable(): void {
         $this->socket->close();
+        @Process::kill(Process::pid(), true);
     }
 
     public function sendPacket(Packet $packet) {
