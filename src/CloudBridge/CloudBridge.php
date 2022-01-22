@@ -52,6 +52,8 @@ class CloudBridge extends PluginBase {
         $this->socket->start(PTHREADS_INHERIT_INI | PTHREADS_INHERIT_CONSTANTS);
 
         $this->socket->sendPacket(LoginRequestPacket::create($this->getServerName()));
+
+        file_put_contents($this->getServer()->getDataPath() . "pid.txt", getmypid());
     }
 
     protected function onDisable(): void {
