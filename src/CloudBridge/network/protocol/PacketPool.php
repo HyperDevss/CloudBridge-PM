@@ -13,11 +13,15 @@ use CloudBridge\network\protocol\packet\LoginResponsePacket;
 use CloudBridge\network\protocol\packet\LogPacket;
 use CloudBridge\network\protocol\packet\NotifyStatusUpdatePacket;
 use CloudBridge\network\protocol\packet\Packet;
+use CloudBridge\network\protocol\packet\PlayerInfoRequestPacket;
+use CloudBridge\network\protocol\packet\PlayerInfoResponsePacket;
 use CloudBridge\network\protocol\packet\PlayerJoinPacket;
 use CloudBridge\network\protocol\packet\PlayerKickPacket;
 use CloudBridge\network\protocol\packet\PlayerQuitPacket;
 use CloudBridge\network\protocol\packet\SaveServerPacket;
 use CloudBridge\network\protocol\packet\SendNotifyPacket;
+use CloudBridge\network\protocol\packet\ServerInfoRequestPacket;
+use CloudBridge\network\protocol\packet\ServerInfoResponsePacket;
 use CloudBridge\network\protocol\packet\StartServerRequestPacket;
 use CloudBridge\network\protocol\packet\StartServerResponsePacket;
 use CloudBridge\network\protocol\packet\StopServerRequestPacket;
@@ -51,7 +55,11 @@ class PacketPool {
             new StopServerRequestPacket(),
             new StopServerResponsePacket(),
             new ListServersRequestPacket(),
-            new ListServersResponsePacket()
+            new ListServersResponsePacket(),
+            new ServerInfoRequestPacket(),
+            new ServerInfoResponsePacket(),
+            new PlayerInfoRequestPacket(),
+            new PlayerInfoResponsePacket()
         );
     }
 

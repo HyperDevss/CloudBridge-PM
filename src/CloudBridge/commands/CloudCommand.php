@@ -46,15 +46,31 @@ class CloudCommand extends Command {
                         }
                     } else if (strtolower($args[0]) == "list") {
                         ServerAPI::listServers($sender);
+                    } else if (strtolower($args[0]) == "serverinfo" || strtolower($args[0]) == "si") {
+                        if (isset($args[1])) {
+                            ServerAPI::serverInfo($sender, $args[1]);
+                        } else {
+                            $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud serverinfo <server>");
+                        }
+                    } else if (strtolower($args[0]) == "playerinfo" || strtolower($args[0]) == "pi") {
+                        if (isset($args[1])) {
+                            ServerAPI::playerInfo($sender, $args[1]);
+                        } else {
+                            $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud playerinfo <server>");
+                        }
                     } else {
                         $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud start <template> [count]");
                         $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud stop <server>");
+                        $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud serverinfo <server>");
+                        $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud playerinfo <server>");
                         $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud list");
                         $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud notify");
                     }
                 } else {
                     $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud start <template> [count]");
                     $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud stop <server>");
+                    $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud serverinfo <server>");
+                    $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud playerinfo <server>");
                     $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud list");
                     $sender->sendMessage(CloudBridge::getPrefix() . "§c/cloud notify");
                 }

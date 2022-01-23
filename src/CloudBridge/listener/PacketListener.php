@@ -12,10 +12,12 @@ use CloudBridge\network\protocol\packet\DispatchCommandPacket;
 use CloudBridge\network\protocol\packet\ListServersResponsePacket;
 use CloudBridge\network\protocol\packet\LoginResponsePacket;
 use CloudBridge\network\protocol\packet\LogPacket;
+use CloudBridge\network\protocol\packet\PlayerInfoResponsePacket;
 use CloudBridge\network\protocol\packet\PlayerJoinPacket;
 use CloudBridge\network\protocol\packet\PlayerKickPacket;
 use CloudBridge\network\protocol\packet\PlayerQuitPacket;
 use CloudBridge\network\protocol\packet\SendNotifyPacket;
+use CloudBridge\network\protocol\packet\ServerInfoResponsePacket;
 use CloudBridge\network\protocol\packet\StartServerResponsePacket;
 use CloudBridge\network\protocol\packet\StopServerResponsePacket;
 use CloudBridge\network\protocol\packet\TextPacket;
@@ -113,7 +115,42 @@ class PacketListener implements Listener {
                         );
                     }
                 }
+            } else if ($packet instanceof ServerInfoResponsePacket) {
+                if (($player = Server::getInstance()->getPlayerByPrefix($packet->player)) !== null) {
+                    if ($packet->code == $packet::SUCCESS) {
+                        $player->sendMessage(CloudBridge::getPrefix() . "Name: §e" . $packet->name);
+                        $player->sendMessage(CloudBridge::getPrefix() . "Id: §e" . $packet->id);
+                        $player->sendMessage(CloudBridge::getPrefix() . "Template: §e" . $packet->template);
+                        $player->sendMessage(CloudBridge::getPrefix() . "Port: §e" . $packet->port);
+                        $player->sendMessage(CloudBridge::getPrefix() . "Players §8(§e" . count($packet->players) . "§8)§7: §e" . implode(", ", $packet->players));
+                        $player->sendMessage(CloudBridge::getPrefix() . "MaxPlayers: §e" . $packet->maxPlayers);
+                        $player->sendMessage(CloudBridge::getPrefix() . "ServerStatus: §e" . $this->statusString($packet->serverStatus));
+                    } else {
+                        $player->sendMessage(CloudBridge::getPrefix() . "§cThe server §e" . $packet->name . " §cdoesn't exists!");
+                    }
+                }
+            } else if ($packet instanceof PlayerInfoResponsePacket) {
+                if (($player = Server::getInstance()->getPlayerByPrefix($packet->player)) !== null) {
+                    if ($packet->code == $packet::SUCCESS) {
+                        $player->sendMessage(CloudBridge::getPrefix() . "Name: §e" . $packet->name);
+                        $player->sendMessage(CloudBridge::getPrefix() . "Host: §e" . $packet->address . ":" . $packet->port);
+                        $player->sendMessage(CloudBridge::getPrefix() . "UUID: §e" . $packet->uuid);
+                        $player->sendMessage(CloudBridge::getPrefix() . "XUID: §e" . $packet->xuid);
+                        $player->sendMessage(CloudBridge::getPrefix() . "CurrentServer: §e" . $packet->currentServer);
+                        $player->sendMessage(CloudBridge::getPrefix() . "CurrentProxy: §c" . ($packet->currentProxy == "" ? "-" : $packet->currentProxy));
+                    } else {
+                        $player->sendMessage(CloudBridge::getPrefix() . "§cThe player §e" . $packet->name . " §cisn't online!");
+                    }
+                }
             }
         }
+    }
+
+    private function statusString(int $status): string {
+        if ($status == 0) return "§2STARTING";
+        else if ($status == 1) return "§aSTARTED";
+        else if ($status == 2) return "§4STOPPING";
+        else if ($status == 3 ) return "§cSTOPPED";
+        return "";
     }
 }
